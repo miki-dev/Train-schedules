@@ -3,7 +3,7 @@
 
 #import libraries
 import requests
-import urllib.request
+#import urllib.request
 import time
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -12,7 +12,7 @@ import pandas as pd
 #set webpage you want to search
 url = "https://www.jreast-timetable.jp/2006/timetable/tt1341/1341010.html"
 page = requests.get(url)
-soup = BeautifulSoup(page.text, “html.parser”)
+soup = BeautifulSoup(page.text, 'html.parser')
 
 station_name = []
 train_line = []
@@ -25,3 +25,11 @@ n_of_trains = []
 #find time table
 timetable= soup.find_all(class_ = "timetable_box")
 
+
+# find all hours
+hours_list = soup.find_all(class_ = "results_03")
+for i in hours_list:
+    cont = i.contents[0]
+    attr = cont.attrs
+    hrefs = attr['href']
+    state_links.append(hrefs)
