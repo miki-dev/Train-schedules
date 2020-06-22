@@ -4,6 +4,7 @@
 # data into CSV;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
 # look for data;  https://www.edureka.co/blog/web-scraping-with-python/
 # programming historian;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
+# https://realpython.com/beautiful-soup-web-scraper-python/
 
 #import libraries
 import requests
