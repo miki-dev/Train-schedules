@@ -21,43 +21,38 @@ soup = BeautifulSoup(page.text, "html.parser")
 print(soup.prettify())
 
 #info from table
-info = soup.findALL("div", {"class": "timetable_box"})
+info = soup.find_all("div", {"class": "timetable_box"})
 print (len(info))
 
 #station name and train line
-station_name = info.findALL("h2", {"class": "timetable_h"})
-print(station_name[0].text)
-
+station_name = info.find_all("h2", {"class": "timetable_h"})
+#print(station_name[0].text)
 train_line = station_name.br[0].text
-print(train_line)
+#print(train_line)
 
 #weekday/weekend
-day = info.findALL("div", {"class": "timetable basicTable02"})
-print(day.h3[0].text)
+day = info.find_all("div", {"class": "timetable basicTable02"})
+#print(day.h3[0].text)
 
+#timetable
+timetable = info.find_all("table", {"class": "result_03"})
+hours = timetable.find_all("tr")
+minutes = timetable.find_all("span", {"class": "minute"})
+#print(len(hours))
+
+for i in hours:
+    hour = timetable.tr.td[i].text
+    for m in minutes:
+        minute = minutes[m].text
+        
+
+    
 #new file name
 filename = station_name +" Timetable.csv"
 f = open(filename, "w")
 
 header = "Hour, Minute\n" 
 f.write(header)
-
-#timetable
-timetable = info.findALL("table", {"class": "result_03"})
-
-hours = timetable.findALL("tr")
-print(len(hours))
-hour = timetable.td[0].text
-print(hour)
-minute = hours.findALL(
-
-for i in timetable: 
-    hour = timetable.tr.td[0].text
-        for n in timetable:
-            minute = timetable.tr.td
-    
-
-
 """
 for a in soup.findAll('a',href=True, attrs={'class':'timteble_box'}):
 name=a.find('div', attrs={'class':''})
