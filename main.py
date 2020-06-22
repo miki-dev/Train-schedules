@@ -36,18 +36,17 @@ day = info.find_all("div", {"class": "timetable basicTable02"})
 #print(day.h3[0].text)
 
 #timetable
+hours = []
+minutes = [] 
 timetable = info.find_all("table", {"class": "result_03"})
-hours = timetable.find_all("tr")
-minutes = timetable.find_all("span", {"class": "minute"})
-#print(len(hours))
+for i in timetable:
+    hour = i.find(td[0])
+    hours.append(hour.text)
+    for m in timetable:
+        minute = m.find("span,  {"class": "minute"})
+        minutes.append(minute.text)
 
-for i in hours:
-    hour = timetable.tr.td[i].text
-    for m in minutes:
-        minute = minutes[m].text
-        
-
-    
+                        
 #new file name
 filename = station_name +" Timetable.csv"
 f = open(filename, "w")
@@ -62,14 +61,6 @@ rating=a.find('div', attrs={'class':'hGSR34 _2beYZw'})
 products.append(name.text)
 prices.append(price.text)
 ratings.append(rating.text) 
-
-station_name = []
-train_line = []
-destination = []
-timetable = []
-hours = []
-minutes = []
-n_of_trains = []
 
 #find time table
 timetable= soup.find_all(class_ = "timetable_box")
