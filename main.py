@@ -3,6 +3,7 @@
 # https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 # data into CSV;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
 # look for data;  https://www.edureka.co/blog/web-scraping-with-python/
+# programming historian;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
 
 #import libraries
 import requests
@@ -15,6 +16,7 @@ import pandas as pd
 #set webpage you want to search
 url = "https://www.jreast-timetable.jp/2006/timetable/tt1341/1341010.html"
 page = requests.get(url)
+#page = urllib.request.urlopen(url)
 soup = BeautifulSoup(page.text, "html.parser")
 print(soup.prettify())
 
