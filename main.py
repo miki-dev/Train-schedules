@@ -8,28 +8,26 @@
 
 #import libraries
 import requests
-import urllib.request
-import time
 from bs4 import BeautifulSoup
-from selenium import webdriver
-import pandas as pd
 
 #set webpage you want to search
-url = "https://www.jreast-timetable.jp/2006/timetable/tt1341/1341010.html"
+url = "https://www.jreast-timetable.jp/2007/timetable/tt1341/1341010.html"
 page = requests.get(url)
-#page = urllib.request.urlopen(url)
 soup = BeautifulSoup(page.text, "html.parser")
-print(soup.prettify())
+#print(soup.prettify())
 
 #info from table
 info = soup.find_all("div", {"class": "timetable_box"})
-print (len(info))
+#print (len(info))
 
 #station name and train line
-station_name = info.find_all("h2", {"class": "timetable_h"})
-#print(station_name[0].text)
-train_line = station_name.br[0].text
+station_name = soup.find("h2", {"class": "timetable_h"})
+print(station_name)
+#train_line = station_name.br[0].text
 #print(train_line)
+
+
+
 
 #weekday/weekend
 day = info.find_all("div", {"class": "timetable basicTable02"})
