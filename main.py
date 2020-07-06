@@ -29,6 +29,40 @@ print(station_name)
 
 
 
+
+#translation
+# Convert ShiftJIS to UTF-8
+import sys
+import codecs
+
+ustdout = codecs.getwriter('utf_8')(sys.stdout)
+jstdin = codecs.getreader('shift_jis')(sys.stdin)
+
+for line in jstdin.readlines():
+    ustdout.write(line)
+
+#OR
+H='Chinese Characters'
+print h.decode('utf8')
+
+#OR 
+import json
+a = "chinese characters here"
+print json.dumps(a, ensure_ascii=False)
+
+>>> json_string = json.dumps("ברי צקלה", ensure_ascii=False).encode('utf8')
+>>> json_string
+b'"\xd7\x91\xd7\xa8\xd7\x99 \xd7\xa6\xd7\xa7\xd7\x9c\xd7\x94"'
+>>> print(json_string.decode())
+"ברי צקלה"
+
+
+
+
+
+
+
+
 #weekday/weekend
 day = info.find_all("div", {"class": "timetable basicTable02"})
 #print(day.h3[0].text)
