@@ -21,17 +21,61 @@ info = soup.find_all("div", {"class": "timetable_box"})
 #print (len(info))
 
 #station name and train line
-station_name = soup.find("h2", {"class": "timetable_h"})
-print(station_name)
-#train_line = station_name.br[0].text
+name = soup.find("h2", {"class": "timetable_h"})
+print(name)
+names = []
+for i in name.stripped_strings:
+    print(repr(i))
+    names.append(i)
+print(names)
+
+names = name.get_text("|", strip=True)
+
+"""
+#check original encoding
+soup.original_encoding
+
+We can fix this by passing in the correct from_encoding:
+soup = BeautifulSoup(markup, from_encoding="iso-8859-8")
+soup.h1
+<h1>םולש</h1>
+soup.original_encoding
+'iso8859-8'
+If you don’t know what the correct encoding is, but you know that Unicode, Dammit is guessing wrong, you can pass the wrong guesses in as exclude_encodings:
+soup = BeautifulSoup(markup, exclude_encodings=["ISO-8859-7"])
+soup.h1
+<h1>םולש</h1>
+soup.original_encoding
+'WINDOWS-1255'
+"""
+
+#OR
+station_name = name.contents[0].name
+#train_line = name.br[0].text
 #print(train_line)
 
+#weekday or weekend
+if len(soup.find("h3", {"class": "tit_weekday"})) == 1:
+    week = soup.find("h3", {"class": "tit_weekday"})
+else:
+    week = soup.find("h3", {"class": "tit_holiday"})
+print(week)
 
+#timetable
+timetable = soup.find("table", {"class": "result_03"})
+timetable = timetable.find_all("tr")
+print(timetable.contents[0].name)
+print(len(list(timetable.descendants)))
+
+
+hour = timetable.children
+first_link.find_next_siblings("a")
+    
 
 
 
 #translation
-# Convert ShiftJIS to UTF-8
+# Convert ShiftJIS to UTFtimetable.-8
 import sys
 import codecs
 
@@ -60,17 +104,6 @@ b'"\xd7\x91\xd7\xa8\xd7\x99 \xd7\xa6\xd7\xa7\xd7\x9c\xd7\x94"'
 
 
 
-
-
-
-#weekday/weekend
-day = info.find_all("div", {"class": "timetable basicTable02"})
-#print(day.h3[0].text)
-
-#timetable
-hours = []
-minutes = [] 
-timetable = info.find_all("table", {"class": "result_03"})
 for i in timetable:
     hour = i.find(td[0])
     hours.append(hour.text)
@@ -78,7 +111,6 @@ for i in timetable:
         minute = m.find("span,  {"class": "minute"})
         minutes.append(minute.text)
 
-                        
 #new file name
 filename = station_name +" Timetable.csv"
 f = open(filename, "w")
