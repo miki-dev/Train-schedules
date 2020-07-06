@@ -31,6 +31,8 @@ print(names)
 
 names = name.get_text("|", strip=True)
 
+### https://stackoverflow.com/questions/26491448/how-to-fix-broken-utf-8-encoding-in-python
+
 """
 #check original encoding
 soup.original_encoding
