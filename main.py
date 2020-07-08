@@ -9,52 +9,25 @@
 #import libraries
 import requests
 from bs4 import BeautifulSoup
+from ftfy import fix_encoding
 
 #set webpage you want to search
-url = "https://www.jreast-timetable.jp/2007/timetable/tt1341/1341010.html"
+url = "https://www.jreast-timetable.jp/2007/timetable/tt1341/1341011.html"
 page = requests.get(url)
 soup = BeautifulSoup(page.text, "html.parser")
 #print(soup.prettify())
 
-#info from table
-info = soup.find_all("div", {"class": "timetable_box"})
-#print (len(info))
-
 #station name and train line
-name = soup.find("h2", {"class": "timetable_h"})
-print(name)
-names = []
-for i in name.stripped_strings:
-    print(repr(i))
-    names.append(i)
-print(names)
-
-names = name.get_text("|", strip=True)
-
-### https://stackoverflow.com/questions/26491448/how-to-fix-broken-utf-8-encoding-in-python
-
-"""
-#check original encoding
-soup.original_encoding
-
-We can fix this by passing in the correct from_encoding:
-soup = BeautifulSoup(markup, from_encoding="iso-8859-8")
-soup.h1
-<h1>םולש</h1>
-soup.original_encoding
-'iso8859-8'
-If you don’t know what the correct encoding is, but you know that Unicode, Dammit is guessing wrong, you can pass the wrong guesses in as exclude_encodings:
-soup = BeautifulSoup(markup, exclude_encodings=["ISO-8859-7"])
-soup.h1
-<h1>םולש</h1>
-soup.original_encoding
-'WINDOWS-1255'
-"""
-
-#OR
-station_name = name.contents[0].name
-#train_line = name.br[0].text
+title = soup.find("h2", {"class": "timetable_h"})
+title = title.get_text()
+title = fix_encoding(title)
+title = str.split(title)
+station_name = title[0]
+#print(station_name)
+train_line = ' '.join(title[1:])
 #print(train_line)
+
+
 
 #weekday or weekend
 if len(soup.find("h3", {"class": "tit_weekday"})) == 1:
