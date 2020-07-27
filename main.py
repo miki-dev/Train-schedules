@@ -1,10 +1,11 @@
-# https://towardsdatascience.com/how-to-web-scrape-with-python-in-4-minutes-bc49186a8460
-# https://opensource.com/article/20/5/web-scraping-python
-# https://www.crummy.com/software/BeautifulSoup/bs4/doc/
-# data into CSV;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
-# look for data;  https://www.edureka.co/blog/web-scraping-with-python/
-# programming historian;  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
+#intoduction:  https://realpython.com/python-web-scraping-practical-introduction/
+#cheatsheet:   https://blog.hartleybrody.com/web-scraping-cheat-sheet/#making-simple-requests
+#clean-up data: https://opensource.com/article/20/5/web-scraping-python
+#data into CSV:  https://programminghistorian.org/en/lessons/intro-to-beautiful-soup
 # https://realpython.com/beautiful-soup-web-scraper-python/
+#pandas table tutorial:  https://towardsdatascience.com/web-scraping-html-tables-with-python-c9baba21059
+#pandas table rearrange:  https://medium.com/swlh/how-to-scrape-a-website-with-a-single-line-of-python-code-5efe124275bb
+#tr -> td: https://stackoverflow.com/questions/46242664/python-web-scraping-html-table-and-printing-to-csv
 
 #import libraries
 import requests
@@ -27,86 +28,61 @@ station_name = title[0]
 train_line = ' '.join(title[1:])
 #print(train_line)
 
-
-
 #weekday or weekend
-if len(soup.find("h3", {"class": "tit_weekday"})) == 1:
-    week = soup.find("h3", {"class": "tit_weekday"})
-else:
-    week = soup.find("h3", {"class": "tit_holiday"})
-print(week)
+for p in soup.select('p'):
+    if p['class'] == "tit_holiday"
+        day = p.text.strip()
+        print(p.text)
+        elif p['class'] == "tit_weekday":
+            day = p.text.strip()
+            print(p.text)
+            else:
+                break
 
 #timetable
 timetable = soup.find("table", {"class": "result_03"})
 timetable = timetable.find_all("tr")
-print(timetable.contents[0].name)
-print(len(list(timetable.descendants)))
-
-
-hour = timetable.children
-first_link.find_next_siblings("a")
+print(len(timetable)) #should be 21
+for td in timetable.select('td')):
+    time = td.chilren[0]
+    time = time.text.strip()
+    for s in td.select('span', {"class": "minute"}):
+        time.append(s)
+    print(time.text)
     
+#another way for timetable
+list_of_rows = []
+for row in timetable.findAll('tr'):
+    list_of_cells = []
+    for cell in row.findAll(["th","td"]):
+        text = cell.text
+        list_of_cells.append(text)
+    list_of_rows.append(list_of_cells)
 
+for item in list_of_rows:
+    print(' '.join(item))
 
-
-#translation
-# Convert ShiftJIS to UTFtimetable.-8
-import sys
-import codecs
-
-ustdout = codecs.getwriter('utf_8')(sys.stdout)
-jstdin = codecs.getreader('shift_jis')(sys.stdin)
-
-for line in jstdin.readlines():
-    ustdout.write(line)
-
-#OR
-H='Chinese Characters'
-print h.decode('utf8')
-
-#OR 
-import json
-a = "chinese characters here"
-print json.dumps(a, ensure_ascii=False)
-
->>> json_string = json.dumps("ברי צקלה", ensure_ascii=False).encode('utf8')
->>> json_string
-b'"\xd7\x91\xd7\xa8\xd7\x99 \xd7\xa6\xd7\xa7\xd7\x9c\xd7\x94"'
->>> print(json_string.decode())
-"ברי צקלה"
-
-
-
-
-
-for i in timetable:
-    hour = i.find(td[0])
-    hours.append(hour.text)
-    for m in timetable:
-        minute = m.find("span,  {"class": "minute"})
-        minutes.append(minute.text)
-
+    
 #new file name
 filename = station_name +" Timetable.csv"
 f = open(filename, "w")
 
 header = "Hour, Minute\n" 
 f.write(header)
-"""
-for a in soup.findAll('a',href=True, attrs={'class':'timteble_box'}):
-name=a.find('div', attrs={'class':''})
-price=a.find('div', attrs={'class':'_1vC4OE _2rQ-NK'})
-rating=a.find('div', attrs={'class':'hGSR34 _2beYZw'})
-products.append(name.text)
-prices.append(price.text)
-ratings.append(rating.text) 
 
-#find time table
-timetable= soup.find_all(class_ = "timetable_box")
-# find all hours
-hours_list = soup.find_all(class_ = "results_03")
-for i in hours_list:
-    cont = i.contents[0]
-    attr = cont.attrs
-    hrefs = attr['href']
-    state_links.append(hrefs)"""
+import pandas as pd
+info = pd.DataFrame({
+    "station_name": station_name,
+    "train_line": train_line,
+    "week": day,
+    "times": hours
+})
+info
+                        
+#can put lines together
+for product in soup.find_all("div", "products"):
+    product_title = product.find("h3").text
+    product_price = product.find("span", "price").text
+    product_url = product.find("a")["href"]
+    print "{} is selling for {} at {}".format(product_title, product_price, product_url)
+
